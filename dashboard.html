@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم NeoBank المتقدمة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; min-height: 100vh; padding-bottom: 60px; }
+        
+        /* الهيدر العلوي */
+        .navbar { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
+        .logout-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 8px; cursor: pointer; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        .logout-btn:hover { background: #ef4444; color: white; }
+
+        .main-container { max-width: 1300px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 3fr; gap: 30px; }
+        @media (max-width: 950px) { .main-container { grid-template-columns: 1fr; } }
+
+        /* الكرت والجانب الأيمن */
+        .sidebar { display: flex; flex-direction: column; gap: 25px; }
+        .visa-card { background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1e1b4b 100%); border-radius: 20px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 25px rgba(3, 105, 161, 0.2); }
+        .balance-amount { font-size: 34px; font-weight: 700; color: #fff; margin: 10px 0; }
+
+        /* القوائم والتبويبات */
+        .tabs-menu { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; background: #1e293b; padding: 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .tab-btn { flex: 1; min-width: 140px; background: transparent; color: #94a3b8; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .tab-btn.active { background: #38bdf8; color: #0f172a; }
+
+        .content-section { background: #151f32; border-radius: 16px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.05); display: none; }
+        .content-section.active { display: block; }
+
+        h3 { font-size: 20px; margin-bottom: 20px; color: #f1f5f9; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
+        
+        /* الاستمارات */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 14px; }
+        .form-control { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; font-size: 15px; }
+        .form-control:focus { border-color: #38bdf8; outline: none; }
+        .btn-submit { width: 100%; padding: 14px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: #0ea5e9; }
+
+        /* شبكة الخدمات والفواتير */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .service-card { background: #1e293b; border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .service-card:hover { transform: translateY(-3px); border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .service-card i { font-size: 32px; color: #38bdf8; margin-bottom: 12px; }
+        .service-card h4 { margin-bottom: 5px; font-size: 16px; }
+
+        /* متجر المنتجات المطور */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+        .product-card { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.5); border-color: #10b981; }
+        .product-img-holder { height: 160px; background: #111827; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #4b5563; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .product-specs { font-size: 12px; color: #94a3b8; line-height: 1.6; margin-bottom: 15px; background: #0f172a; padding: 10px; border-radius: 6px; }
+        .product-price { font-size: 20px; font-weight: 700; color: #10b981; }
+        .btn-buy { width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .btn-buy:hover { background: #059669; }
+
+        /* نافذة الأمان وتصوير الهوية (Popup) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: #151f32; padding: 30px; border-radius: 16px; max-width: 500px; width: 90%; border: 1px solid #ef4444; text-align: center; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1); }
+        .camera-box { width: 100%; height: 160px; background: #0f172a; border: 2px dashed #334155; border-radius: 12px; margin: 15px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; position: relative; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .camera-box:hover { border-color: #38bdf8; background: #111c30; }
+        .camera-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display:none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><i class="fa-solid fa-building-columns"></i> NeoBank SuperApp</div>
+        <div>
+            <span style="margin-left: 15px;">مرحباً، <b id="user-display" style="color: #38bdf8;">...</b></span>
+            <a href="login.html" class="logout-btn" onclick="localStorage.clear()"><i class="fa-solid fa-sign-out"></i> خروج آمن</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="visa-card">
+                <div style="font-size: 13px; opacity: 0.7;">الرصيد المتاح الكلي</div>
+                <div class="balance-amount" id="balance-display">$0.00</div>
+                <div style="letter-spacing: 3px; font-family: monospace; margin: 20px 0 10px; font-size: 16px;">•••• •••• •••• 8832</div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; opacity: 0.8;">
+                    <div>نوع الحساب النشط: <span id="account-type-badge" style="color: #38bdf8; font-weight: bold;">جاري</span></div>
+                    <div>VISA PLATINUM</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs-menu">
+                <button class="tab-btn active" onclick="switchTab('transfer-tab')"><i class="fa-solid fa-money-bill-transfer"></i> تحويل أموال آمن</button>
+                <button class="tab-btn" onclick="switchTab('bills-tab')"><i class="fa-solid fa-file-invoice-dollar"></i> الفواتير والخدمات</button>
+                <button class="tab-btn" onclick="switchTab('shop-tab')"><i class="fa-solid fa-store"></i> متجر الإلكترونيات</button>
+            </div>
+
+            <div id="transfer-tab" class="content-section active">
+                <h3><i class="fa-solid fa-paper-plane" style="color: #38bdf8;"></i> خدمات الحوالات البنكية المتقدمة</h3>
+                <form id="transferForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>اختر حساب الخصم المصدر:</label>
+                            <select id="srcAccountType" class="form-control" onchange="document.getElementById('account-type-badge').innerText = this.options[this.selectedIndex].text">
+                                <option value="current">حساب جاري (أرصدة حرة)</option>
+                                <option value="saving">حساب توفير واستثمار</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع ونطاق الحوالة البنكية:</label>
+                            <select id="transferType" class="form-control">
+                                <option value="local">حوالة داخلية محلية (فورية مجانية)</option>
+                                <option value="international">حوالة خارجية دولية (تتطلب نظام الحماية KYC 🔒)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم حساب المستخدم المستلم للتحويل:</label>
+                        <input type="text" id="receiverUser" class="form-control" placeholder="ادخل اسم حساب الطرف الآخر بدقة" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ المطلوب نقده وتحويله ($):</label>
+                        <input type="number" id="transferAmount" class="form-control" min="1" placeholder="0.00" required>
+                    </div>
+                    <button type="submit" class="btn-submit">تنفيذ ومعالجة أمر الحوالة </button>
+                </form>
+            </div>
+
+            <div id="bills-tab" class="content-section">
+                <h3><i class="fa-solid fa-bolt" style="color: #fbbf24;"></i> سداد الفواتير الحكومية وشحن الباقات والشبكات</h3>
+                <div class="services-grid">
+                    <div class="service-card" onclick="payService('فاتورة الكهرباء العمومية', 50)">
+                        <i class="fa-solid fa-lightbulb" style="color:#fbbf24;"></i>
+                        <h4>سداد الكهرباء</h4>
+                        <p style="color:#94a3b8; font-size:12px;">قيمة الفاتورة المتبقية: $50</p>
+                    </div>
+                    <div class="service-card" onclick="payService('فاتورة مصلحة المياه', 20)">
+                        <i class="fa-solid fa-droplet" style="color:#38bdf8;"></i>
+                        <h4>سداد المياه</h4>
+                        <p style="color:#94a3b8; font-size:12px;">قيمة الفاتورة المتبقية: $20</p>
+                    </div>
+                    <div class="service-card" onclick="payService('شحن وتعبئة الهاتف الثابت', 15)">
+                        <i class="fa-solid fa-phone" style="color:#a855f7;"></i>
+                        <h4>الهاتف الثابت</h4>
+                        <p style="color:#94a3b8; font-size:12px;">شحن باقة سنوية: $15</p>
+                    </div>
+                    <div class="service-card" onclick="payService('تفعيل باقة إنترنت غير محدودة (شهرة)', 40)">
+                        <i class="fa-solid fa-wifi" style="color:#10b981;"></i>
+                        <h4>باقات الإنترنت الشهرية</h4>
+                        <p style="color:#94a3b8; font-size:12px;">تجديد تلقائي للباقة: $40</p>
+                    </div>
+                    <div class="service-card" onclick="payService('باقة إنترنت فائقة السرعة (أسبوعية)', 15)">
+                        <i class="fa-solid fa-cloud-bolt" style="color:#06b6d4;"></i>
+                        <h4>باقات الإنترنت الأسبوعية</h4>
+                        <p style="color:#94a3b8; font-size:12px;">باقة تصفح أسبوعية: $15</p>
+                    </div>
+                    <div class="service-card" onclick="payService('كرت شبكة محلي مسبق الدفع (فئة بريميوم)', 10)">
+                        <i class="fa-solid fa-ticket" style="color:#f43f5e;"></i>
+                        <h4>تعبئة كروت الشبكات</h4>
+                        <p style="color:#94a3b8; font-size:12px;">سعر الكرت الشامل: $10</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="shop-tab" class="content-section">
+                <h3><i class="fa-solid fa-laptop-code" style="color: #10b981;"></i> متجر المنتجات الرقمية والحواسب والتابلت</h3>
+                <div class="products-grid">
+                    
+                    <div class="product-card">
+                        <div class="product-img-holder"><i class="fa-solid fa-mobile-retro" style="color:#38bdf8;"></i></div>
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">iPhone 15 Pro Max</div>
+                                <div class="product-specs">
+                                    ⚙️ <b>المواصفات الفنية:</b><br>
+                                    • الشاشة: 6.7 بوصة Super Retina XDR<br>
+                                    • المعالج: A17 Pro بتكنولوجيا 3 نانومتر<br>
+                                    • الذاكرة والتخزين: 512GB NVMe<br>
+                                    • الهيكل: حماية كاملة من التياتنيوم
+                                </div>
+                            </div>
+                            <div>
+                                <div class="product-price">$1200</div>
+                                <button class="btn-buy" onclick="buyProduct('iPhone 15 Pro Max', 1200)">شراء وخصم فوري</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-img-holder"><i class="fa-solid fa-laptop" style="color:#a855f7;"></i></div>
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">MacBook Pro M3 Ultra</div>
+                                <div class="product-specs">
+                                    ⚙️ <b>المواصفات الفنية:</b><br>
+                                    • المعالج: Apple M3 Max (16 Core)<br>
+                                    • الذاكرة العشوائية: 36GB Unified RAM<br>
+                                    • الهارد: 1TB SSD Ultra-Fast<br>
+                                    • النظام: macOS Sequoia المتطور
+                                </div>
+                            </div>
+                            <div>
+                                <div class="product-price">$2400</div>
+                                <button class="btn-buy" onclick="buyProduct('MacBook Pro M3 Ultra', 2400)">شراء وخصم فوري</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-img-holder"><i class="fa-solid fa-tablet-screen-button" style="color:#f43f5e;"></i></div>
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">iPad Pro M2 Liquid</div>
+                                <div class="product-specs">
+                                    ⚙️ <b>المواصفات الفنية:</b><br>
+                                    • الشاشة: 12.9 بوصة Liquid Retina XDR<br>
+                                    • المعالج: شريحة M2 ثمانية النواة<br>
+                                    • الشبكة: يدعم الـ 5G وشريحة eSIM<br>
+                                    • الإضافات: متوافق مع القلم والـ Magic Keyboard
+                                </div>
+                            </div>
+                            <div>
+                                <div class="product-price">$900</div>
+                                <button class="btn-buy" onclick="buyProduct('iPad Pro M2 Liquid', 900)">شراء وخصم فوري</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-img-holder"><i class="fa-solid fa-desktop" style="color:#10b981;"></i></div>
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">PC Gaming Expert v4</div>
+                                <div class="product-specs">
+                                    ⚙️ <b>المواصفات الفنية:</b><br>
+                                    • المعالج: Intel Core i9-14900K<br>
+                                    • كرت الشاشة: RTX 4090 24GB GDDR6X<br>
+                                    • اللوحة الأم: ASUS ROG Maximus Z790<br>
+                                    • التبريد: مائي مغلق مع مراوح RGB متزامنة
+                                </div>
+                            </div>
+                            <div>
+                                <div class="product-price">$3200</div>
+                                <button class="btn-buy" onclick="buyProduct('PC Gaming Expert v4', 3200)">شراء وخصم فوري</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="securityModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: #ef4444; border-color: rgba(239,68,68,0.2);"><i class="fa-solid fa-shield-halved"></i> جدار حماية التحقق البيومتري (KYC)</h3>
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 15px;">نظراً لأن هذه الحوالة تندرج تحت <b>العمليات الخارجية الدولية</b>، يتوجب عليك رفع إثبات الهوية والتحقق الحيوي لإصدار تصريح سحب وتغطية المبلغ:</p>
+            
+            <div class="camera-box" onclick="triggerCamera('id-snap')">
+                <i class="fa-solid fa-id-card" id="icon-id" style="font-size:30px; margin-bottom:10px; color:#38bdf8;"></i>
+                <span id="text-id">الخطوة 1: اضغط هنا لتصوير ومسح بطاقتك الشخصية 📸</span>
+                <img id="img-id" src="">
+            </div>
+
+            <div class="camera-box" onclick="triggerCamera('selfie-snap')">
+                <i class="fa-solid fa-user-shield" id="icon-selfie" style="font-size:30px; margin-bottom:10px; color:#a855f7;"></i>
+                <span id="text-selfie">الخطوة 2: اضغط هنا لالتقاط سيلفي مباشر وأنت تحمل البطاقة 👤</span>
+                <img id="img-selfie" src="">
+            </div>
+
+            <button class="btn-submit" style="background:#ef4444; color:white; margin-top:15px; font-weight: bold;" onclick="confirmIdentityAndSend()">تأكيد مطابقة البيانات وسحب المبلغ وإرساله الآن ✅</button>
+        </div>
+    </div>
+
+    <script>
+        // التحقق من الجلسة البنكية
+        let userData = JSON.parse(localStorage.getItem('user'));
+        if (!userData) { window.location.href = 'login.html'; }
+        
+        function updateUI() {
+            document.getElementById('user-display').innerText = userData.username;
+            document.getElementById('balance-display').innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(userData.balance);
+        }
+        updateUI();
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // محاكاة تصوير وحفظ الهوية الفورية الفائقة التشفير
+        function triggerCamera(type) {
+            if(type === 'id-snap') {
+                document.getElementById('icon-id').style.display = 'none';
+                document.getElementById('text-id').innerText = "✅ تم مسح وحفظ بيانات البطاقة الشخصية بنجاح بنظام تشفير معزز.";
+                document.getElementById('img-id').src = "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=500"; 
+                document.getElementById('img-id').style.display = 'block';
+            } else {
+                document.getElementById('icon-selfie').style.display = 'none';
+                document.getElementById('text-selfie').innerText = "✅ تم التحقق من الوجه ومطابقته للبطاقة بنسبة تفوق 99.8%.";
+                document.getElementById('img-selfie').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500"; 
+                document.getElementById('img-selfie').style.display = 'block';
+            }
+        }
+
+        // إرسال الحوالة وجدار الأمان
+        document.getElementById('transferForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const type = document.getElementById('transferType').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+
+            if (amount > userData.balance) {
+                alert("❌ خطأ أمني: الرصيد الحالي المتوفر بحسابك لا يغطي هذه العملية.");
+                return;
+            }
+
+            if (type === 'international') {
+                // فرض جدار الحماية وتصوير البيانات الشخصية قبل سحب الفلس كلياً!
+                document.getElementById('securityModal').style.display = 'flex';
+            } else {
+                executeBankProcess('http://localhost:3000/api/transfer', {
+                    senderId: userData.id,
+                    receiverUsername: document.getElementById('receiverUser').value,
+                    amount: amount,
+                    description: `حوالة داخلية محلية فورية من حساب (${document.getElementById('srcAccountType').value})`
+                });
+            }
+        });
+
+        function confirmIdentityAndSend() {
+            if(document.getElementById('img-id').style.display !== 'block' || document.getElementById('img-selfie').style.display !== 'block') {
+                alert("⚠️ تنبيه نظام الأمن: يرجى إتمام تصوير البطاقة الشخصية والسيلفي للمطابقة البيومترية أولاً!");
+                return;
+            }
+            document.getElementById('securityModal').style.display = 'none';
+            
+            executeBankProcess('http://localhost:3000/api/transfer', {
+                senderId: userData.id,
+                receiverUsername: document.getElementById('receiverUser').value,
+                amount: parseFloat(document.getElementById('transferAmount').value),
+                description: `حوالة خارجية دولية محمية بـ KYC الحماية (${document.getElementById('srcAccountType').value})`
+            });
+        }
+
+        // سداد الفواتير والشراء من المتجر
+        function payService(serviceName, price) {
+            if (price > userData.balance) { return alert("❌ سحب مرفوض: رصيدك الحالي غير كافٍ."); }
+            if (confirm(`هل توافق على سداد رسوم [${serviceName}] بقيمة $${price} والخصم الفوري من حسابك؟`)) {
+                executeBankProcess('http://localhost:3000/api/pay-service', { userId: userData.id, amount: price, desc: serviceName });
+            }
+        }
+
+        function buyProduct(prodName, price) {
+            if (price > userData.balance) { return alert("❌ سحب مرفوض: الرصيد غير كافٍ لإكمال عملية الشراء."); }
+            if (confirm(`هل أنت متأكد من رغبتك في شراء المنتج الفاخر [${prodName}] بمبلغ $${price}؟`)) {
+                executeBankProcess('http://localhost:3000/api/pay-service', { userId: userData.id, amount: price, desc: `شراء وتملك جهاز: ${prodName}` });
+            }
+        }
+
+        // محرك الربط الشامل بالخادم وتحديث الأرصدة حياً بالـ MySQL
+        async function executeBankProcess(url, bodyData) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert("🎉 " + data.message);
+                    userData.balance = data.newBalance;
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    updateUI();
+                } else {
+                    alert("❌ " + data.message);
+                }
+            } catch(e) { alert("❌ عطل: فشل الربط بخادم البنك المحمي."); }
+        }
+    </script>
+</body>
+</html>

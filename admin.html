@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBank - الإدارة العليا</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-panel">
+    <nav class="navbar admin-nav">
+        <div class="nav-brand">NeoBank Admin Control Center 🛡️</div>
+        <a href="dashboard.html" class="btn-logout">معاينة كحساب عادي</a>
+    </nav>
+
+    <main class="admin-container">
+        <h2>إدارة حسابات المستخدمين وتعديل الأرصدة</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم الحساب (ID)</th>
+                        <th>اسم المستخدم</th>
+                        <th>الصلاحية</th>
+                        <th>الرصيد الحالي</th>
+                        <th>إجراءات إدارية</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-users-rows">
+                    <tr>
+                        <td>1</td>
+                        <td>ahmed_user</td>
+                        <td>User</td>
+                        <td><input type="number" value="2500.00" class="admin-balance-input" id="bal-1"> $</td>
+                        <td>
+                            <button onclick="updateBalance(1)" class="btn-mini save">تحديث</button>
+                            <button onclick="deleteUser(1)" class="btn-mini delete">حذف</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

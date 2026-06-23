@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBank - تسجيل الدخول</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-body">
+    <div class="login-container">
+        <h2>مرحباً بك في <span class="brand-color">NeoBank</span></h2>
+        <p class="subtitle">قم بتسجيل الدخول لإدارة أموالك بأمان</p>
+        
+        <div id="alert-box" class="alert hidden"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="username" required placeholder="أدخل اسم المستخدم">
+            </div>
+            
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" required placeholder="أدخل كلمة المرور">
+            </div>
+
+            <div class="captcha-wrapper">
+                <label>التحقق الأمني (Captcha)</label>
+                <div class="captcha-box">
+                    <span id="captcha-text">X8b9P</span>
+                    <button type="button" id="refresh-captcha" onclick="generateCaptcha()">🔄</button>
+                </div>
+                <input type="text" id="captcha-input" required placeholder="اكتب الرمز الظاهر أعلاه">
+            </div>
+
+            <div class="form-actions">
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberMe"> تذكرني
+                </label>
+            </div>
+
+            <button type="submit" class="btn-primary">تسجيل الدخول</button>
+        </form>
+    </div>
+<p style="text-align: center; margin-top: 15px; color: #fff;">
+    ليس لديك حساب؟ <a href="register.html" style="color: #3498db; text-decoration: none; font-weight: bold;">اضغط هنا لإنشاء حساب</a>
+</p>
+    <script src="login.js"></script>
+</body>
+</html>

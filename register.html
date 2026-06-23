@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد - NeoBank</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container" style="max-width: 450px; margin: 60px auto; padding: 30px; background: #1a2238; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <h2 style="color: #fff; text-align: center; margin-bottom: 5px;">فتح حساب بنكي جديد</h2>
+        <p style="color: #b3b3b3; text-align: center; margin-bottom: 25px;">انضم إلى NeoBank وادر أموالك بذكاء</p>
+        
+        <div id="reg-alert-box" class="alert hidden" style="padding: 12px; border-radius: 5px; margin-bottom: 15px; text-align: center; color: #fff;"></div>
+
+        <form id="registerForm">
+            <label style="color: #fff; display: block; margin-bottom: 8px;">اختر اسم المستخدم:</label>
+            <input type="text" id="reg-username" required style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #34495e; background: #111726; color: #fff;">
+
+            <label style="color: #fff; display: block; margin-bottom: 8px;">اختر كلمة المرور:</label>
+            <input type="password" id="reg-password" required style="width: 100%; padding: 10px; margin-bottom: 25px; border-radius: 5px; border: 1px solid #34495e; background: #111726; color: #fff;">
+
+            <button type="submit" style="width: 100%; padding: 12px; background: #2ecc71; border: none; border-radius: 5px; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer;">تأكيد فتح الحساب 🚀</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 20px; color: #fff;">
+            لديك حساب بالفعل؟ <a href="login.html" style="color: #3498db; text-decoration: none;">العودة لتسجيل الدخول</a>
+        </p>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

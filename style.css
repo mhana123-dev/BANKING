@@ -1,0 +1,122 @@
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --neon-blue: #38bdf8;
+    --neon-green: #4ade80;
+    --neon-red: #f87171;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* بطاقة الحساب البنكية الزجاجية */
+.crypto-card {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 25px auto;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.crypto-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.card-label { color: rgba(255, 255, 255, 0.7); font-size: 14px; margin: 0; }
+.card-balance { font-size: 36px; margin: 10px 0; font-weight: bold; letter-spacing: 1px;}
+.card-footer { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255, 255, 255, 0.8); margin-top: 20px;}
+
+/* النماذج والجداول */
+.login-container, .form-container {
+    background-color: var(--card-bg);
+    padding: 40px;
+    border-radius: 16px;
+    max-width: 400px;
+    margin: 80px auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background-color: #0f172a;
+    color: white;
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    background-color: var(--neon-blue);
+    color: #0f172a;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.success-btn { background-color: var(--neon-green); }
+
+/* كابتشا التصميم */
+.captcha-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f172a;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px dashed var(--neon-blue);
+}
+#captcha-text { font-style: italic; font-weight: bold; letter-spacing: 5px; color: var(--neon-blue); font-size: 20px; }
+
+/* جداول العمليات البنكية */
+.table-wrapper { overflow-x: auto; margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; text-align: right; }
+th, td { padding: 14px; border-bottom: 1px solid #334155; }
+th { color: var(--text-muted); }
+.deposit { color: var(--neon-green); font-weight: bold; }
+.withdraw { color: var(--neon-red); font-weight: bold; }
+
+/* التنبيهات */
+.alert { padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
+.alert.danger { background-color: rgba(248, 113, 113, 0.2); border: 1px solid var(--neon-red); color: var(--neon-red); }
+.alert.success { background-color: rgba(74, 222, 128, 0.2); border: 1px solid var(--neon-green); color: var(--neon-green); }
+.hidden { display: none !important; }
+
+/* Responsive الهاتف */
+@media (max-width: 600px) {
+    .login-container, .form-container { margin: 20px; padding: 20px; }
+    .crypto-card { margin: 15px; }
+}
